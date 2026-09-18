@@ -91,6 +91,16 @@ python -m pytest tests
 - [LICENSES.md](LICENSES.md) — تراخيص كل المكونات
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md) — حل المشكلات
 
+## البناء والتوزيع / Build & Distribute
+
+على ويندوز 64-bit (Python 3.11/3.12 + Inno Setup 6):
+
+```bat
+build_windows.bat
+```
+
+ينفذ بالترتيب: البيئة ← الفحص الذاتي ← 54 اختبارًا ← PyInstaller (Iqra.exe + IqraCLI.exe) ← مثبت `Iqra-Setup-1.1.0.exe`. الخط عربي وبيانات OCR مضمّنة داخل الحزمة.
+
 ## الخصوصية / Privacy
 
 كل المعالجة على جهازك. لا تتبع، لا حساب، لا رفع مستندات، لا مفاتيح API. يعمل مع قطع الإنترنت تمامًا.

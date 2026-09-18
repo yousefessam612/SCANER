@@ -3,7 +3,7 @@
 
 #define MyAppName "Iqra"
 #define MyAppNameAr "اقرأ"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Iqra Project"
 #define MyAppExeName "Iqra.exe"
 #define MyAppId "Iqra.DocumentAccess"
@@ -50,6 +50,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 ; application (PyInstaller onedir build + shared _internal)
 Source: "dist\Iqra\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\IqraCLI.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; documentation
 Source: "README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "USER_GUIDE.md"; DestDir: "{app}"; Flags: ignoreversion

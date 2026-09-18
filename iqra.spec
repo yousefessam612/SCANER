@@ -1,7 +1,8 @@
 # -*- mode: python ; coding: utf-8 -*-
-# PyInstaller spec: builds Iqra (windowed GUI) + IqraCLI (console).
-# The tesseract runtime + tessdata ship beside the exe via the installer,
-# NOT inside it (keeps the exe small and OCR data upgradable).
+# PyInstaller spec: يبني Iqra (واجهة رسومية onedir) + IqraCLI (سطر أوامر onefile).
+# بيانات OCR + خط Amiri (لازم لطبقة البحث في rawpdf) تُضمَّن داخل الحزمة.
+# البناء:  pyinstaller iqra.spec --noconfirm   (على ويندوز 64-bit)
+# ثم المثبت:  ISCC.exe installer.iss
 
 import sys
 from PyInstaller.utils.hooks import collect_submodules
@@ -9,25 +10,28 @@ from PyInstaller.utils.hooks import collect_submodules
 block_cipher = None
 
 hiddenimports = [
-    "PySide6.QtSvg",  # high-DPI icon rendering
-    "tesserocr",      # محرك OCR المدمج
+    "PySide6.QtSvg",
+    "tesserocr",
 ] + collect_submodules("docx") + collect_submodules("psutil")
 
 a = Analysis(
     ["entry.py"],
     pathex=["."],
     binaries=[],
-    datas=[("runtime/tessdata", "runtime/tessdata")],  # بيانات OCR العربية
+    datas=[
+        ("runtime/tessdata", "runtime/tessdata"),   # بيانات OCR العربية/الإنجليزية
+        ("runtime/fonts", "runtime/fonts"),          # خط Amiri لطبقة النص القابلة للبحث
+    ],
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
-    excludes=["tkinter", "matplotlib", "scipy", "pandas", "IPython"],
+    excludes=["tkinter", "matplotlib", "scipy", "pandas", "IPython", "notebook", "pytest"],
     noarchive=False,
 )
 
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
+# --- التطبيق الرئيسي (واجهة رسومية، onedir) ---
 exe = EXE(
     pyz,
     a.scripts,
@@ -54,12 +58,14 @@ coll = COLLECT(
     name="Iqra",
 )
 
-# --- console CLI build (same code, console subsystem)
+# --- أداة سطر الأوامر (ملف تنفيذي واحد) ---
 exe_cli = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
     [],
-    exclude_binaries=True,
     name="IqraCLI",
     debug=False,
     strip=False,
@@ -67,14 +73,4 @@ exe_cli = EXE(
     console=True,
     icon="assets/icon.ico",
     version="version_info.txt",
-)
-
-coll_cli = COLLECT(
-    exe_cli,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    strip=False,
-    upx=False,
-    name="IqraCLI",
 )
