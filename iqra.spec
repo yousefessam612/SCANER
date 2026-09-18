@@ -10,13 +10,14 @@ block_cipher = None
 
 hiddenimports = [
     "PySide6.QtSvg",  # high-DPI icon rendering
+    "tesserocr",      # محرك OCR المدمج
 ] + collect_submodules("docx") + collect_submodules("psutil")
 
 a = Analysis(
     ["entry.py"],
     pathex=["."],
     binaries=[],
-    datas=[],
+    datas=[("runtime/tessdata", "runtime/tessdata")],  # بيانات OCR العربية
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},

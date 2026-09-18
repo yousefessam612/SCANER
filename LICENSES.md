@@ -23,6 +23,7 @@ Iqra is free and open-source software under **AGPL-3.0**.
 | NumPy 2.x | BSD-3-Clause | مفتوح |
 | python-docx 1.1 | MIT | مفتوح |
 | psutil 7 | BSD-3-Clause | مفتوح |
+| tesserocr 5.x | MIT | ربط Python بمكتبة Tesseract 5.5.1 المدمجة |
 
 ## مكونات OCR الموزَّعة (مُضمَّنة في المثبت)
 
