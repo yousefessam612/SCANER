@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+build/
+dist/
+installer_output/
+tests/_output/
+*.iqra_project/
+*.iqra.tmp
+.pytest_cache/

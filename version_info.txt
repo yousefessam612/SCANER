@@ -1,0 +1,34 @@
+# UTF-8
+# PyInstaller version info
+VSVersionInfo(
+    ffi=FixedFileInfo(
+        filevers=(1, 0, 0, 0),
+        prodvers=(1, 0, 0, 0),
+        mask=0x3F,
+        flags=0x0,
+        OS=0x40004,
+        fileType=0x1,
+        subtype=0x0,
+        date=(0, 0),
+    ),
+    kids=[
+        StringFileInfo(
+            [
+                StringTable(
+                    "040904B0",
+                    [
+                        StringStruct("CompanyName", "Iqra Project (AGPL-3.0)"),
+                        StringStruct("FileDescription", "Iqra — Offline Document Accessibility Converter"),
+                        StringStruct("FileVersion", "1.0.0.0"),
+                        StringStruct("InternalName", "Iqra"),
+                        StringStruct("LegalCopyright", "AGPL-3.0 — Free offline accessibility tool. No AI, no cloud, no telemetry."),
+                        StringStruct("OriginalFilename", "Iqra.exe"),
+                        StringStruct("ProductName", "Iqra"),
+                        StringStruct("ProductVersion", "1.0.0"),
+                    ],
+                )
+            ]
+        ),
+        VarFileInfo([VarStruct("Translation", [1033, 1200])]),
+    ],
+)
