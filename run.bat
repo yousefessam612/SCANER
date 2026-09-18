@@ -32,7 +32,13 @@ if not exist ".venv\Scripts\python.exe" (
     echo.
 )
 
+if "%1"=="" (
+    rem بدون معاملات: الواجهة الرسومية
+    if exist ".venv\Scripts\pythonw.exe" (
+        start "" ".venv\Scripts\pythonw.exe" -m app
+    ) else (
+        .venv\Scripts\python -m app
+    )
+    goto :eof
+)
 .venv\Scripts\python -m app %*
-if "%1"=="" echo.
-if "%1"=="" echo الاستخدام: run.bat convert كتاب.pdf -f docx,pdf -o المخرجات
-if "%1"=="" pause

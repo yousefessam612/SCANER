@@ -158,7 +158,7 @@ def _lines_from_words(words: list[dict], raw_words: list | None = None) -> list[
 def convert_pdf(pdf_path, *, lang: str = "ara+eng", quality: str = "balanced",
                 formats: list[str] | None = None,
                 out_dir=None, project: Path | None = None,
-                on_progress=None, should_cancel=None,
+                on_progress=None, should_cancel=None, pause_event=None,
                 trust_text_layer: bool = True, ocr_max_attempts: int = 4,
                 page_breaks: bool = False) -> dict:
     """تحويل PDF كامل: معالجة الصفحات (مع استئناف) ثم التصدير. يعيد ملخصًا."""
@@ -189,6 +189,11 @@ def convert_pdf(pdf_path, *, lang: str = "ara+eng", quality: str = "balanced",
 
     cancelled_at = None
     for i in range(st["next_page"], total):
+        # إيقاف مؤقت: ننتظر حتى يُستأنف أو يُلغى (فحص كل 0.2 ثانية)
+        while pause_event is not None and pause_event.is_set():
+            if should_cancel and should_cancel():
+                break
+            time.sleep(0.2)
         if should_cancel and should_cancel():
             cancelled_at = i
             break

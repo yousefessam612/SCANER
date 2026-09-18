@@ -20,8 +20,8 @@ if [ ! -x ".venv/bin/python" ]; then
 fi
 
 if [ $# -eq 0 ]; then
-    echo "الاستخدام: ./run.sh convert كتاب.pdf -f docx,pdf -o المخرجات"
-    exit 0
+    # بدون معاملات: الواجهة الرسومية
+    exec .venv/bin/python -m app
 fi
 
 exec .venv/bin/python -m app "$@"

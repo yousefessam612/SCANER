@@ -46,6 +46,15 @@ def build_parser() -> argparse.ArgumentParser:
     st = sub.add_parser("selftest", help="فحص ذاتي: OCR + الكُتّاب + البحث العربي")
     _add_common(st)
 
+    sc = sub.add_parser("scan", help="مسح من الماسح الضوئي (ويندوز) وبناء PDF")
+    sc.add_argument("--pages", type=int, default=1, help="عدد الصفحات")
+    sc.add_argument("--dpi", type=int, default=300)
+    sc.add_argument("--device", default=None, help="معرّف الجهاز (افتراضيًا الأول)")
+    sc.add_argument("--wizard", action="store_true", help="معالج المسح في ويندوز")
+    sc.add_argument("-o", "--out", default=None, help="مسار PDF الناتج")
+
+    sub.add_parser("gui", help="فتح الواجهة الرسومية")
+
     return ap
 
 
@@ -154,6 +163,37 @@ def cmd_selftest(args) -> int:
     return 1
 
 
+def cmd_scan(args) -> int:
+    """مسح صفحات من الماسح وتجميعها في PDF ثم تحويلها إن طُلبت صيغ."""
+    from .scanner import wia
+    if not wia.available():
+        print("الماسح متوفر على ويندوز فقط")
+        return 2
+    import tempfile
+    tmps = []
+    try:
+        for i in range(args.pages):
+            print(f"مسح الصفحة {i + 1} من {args.pages}…")
+            tmp = tempfile.mktemp(suffix=".png")
+            wia.scan_page(tmp, device_id=args.device, dpi=args.dpi, wizard=args.wizard)
+            tmps.append(tmp)
+        if not tmps:
+            print("لم تُمسح أي صفحة")
+            return 2
+        out = args.out or tempfile.mktemp(prefix="ممسوح_", suffix=".pdf")
+        wia.images_to_pdf(tmps, out)
+        print(f"PDF جاهز: {out}")
+        return 0
+    except Exception as e:
+        print(f"فشل المسح: {e}")
+        return 1
+
+
 def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
+    if args.cmd == "gui":
+        from .__main__ import _run_gui
+        return _run_gui()
+    if args.cmd == "scan":
+        return cmd_scan(args)
     return {"convert": cmd_convert, "resume": cmd_resume, "batch": cmd_batch, "selftest": cmd_selftest}[args.cmd](args)
